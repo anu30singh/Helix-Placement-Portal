@@ -39,7 +39,7 @@ const Signup = () => {
 
   return (
     <div style={styles.container}>
-      <img src="/sphere-1.png" alt="sphere1" style={styles.sphere1} />
+      <img src="/vite.svg" alt="sphere1" style={styles.sphere1} />
       <img src="/sphere.png" alt="sphere2" style={styles.sphere2} />
       <form style={styles.form} onSubmit={register}>
         <h1 style={styles.title}>Sign Up.</h1>
@@ -96,10 +96,8 @@ const styles = {
   },
   sphere1: {
     position: 'absolute',
-    top: '0%',
+    top: '25%',
     left: '20%',
-    width: '170px',
-    height: '110px',
   },
   sphere2: {
     position: 'absolute',

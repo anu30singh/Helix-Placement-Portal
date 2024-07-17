@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student'); // Default to student role
   const [redirect, setRedirect] = useState(false);
-  const { setUserInfo } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const login = async (e) => {
     e.preventDefault();
@@ -17,13 +17,13 @@ const LoginPage = () => {
       const response = await axios.post('http://localhost:8000/login', {
         username,
         password,
-        role, // Send role to the server
+        role,
       }, {
         withCredentials: true,
       });
 
       if (response.status === 200) {
-        setUserInfo(response.data);
+        setUser(response.data);
         setRedirect(true);
       }
     } catch (error) {
@@ -40,12 +40,12 @@ const LoginPage = () => {
   };
 
   if (redirect) {
-    return <Navigate to={'/apply'} />;
+    return user?.role === 'admin' ? <Navigate to='/admin' /> : <Navigate to='/student' />;
   }
 
   return (
     <div style={styles.container}>
-      <img src="/sphere-1.png" alt="sphere1" style={styles.sphere1} />
+      <img src="/vite.svg" alt="sphere1" style={styles.sphere1} />
       <img src="/sphere.png" alt="sphere2" style={styles.sphere2} />
       <form style={styles.form} onSubmit={login}>
         <h1 style={styles.title}>Sign In.</h1>
@@ -100,10 +100,8 @@ const styles = {
   },
   sphere1: {
     position: 'absolute',
-    top: '0%',
+    top: '25%',
     left: '20%',
-    width: '170px',
-    height: '110px',
   },
   sphere2: {
     position: 'absolute',
@@ -125,8 +123,8 @@ const styles = {
   title: {
     color: 'white',
     marginBottom: '20px',
-    fontWeight:'600',
-    fontFamily:'sans-serif'
+    fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   socialButton: {
     display: 'flex',
@@ -141,8 +139,8 @@ const styles = {
     width: '100%',
     cursor: 'pointer',
   },
-  myText:{
-     color:'rgba(255, 255, 255, 0.7)'
+  myText: {
+    color: 'rgba(255, 255, 255, 0.7)',
   },
   icon: {
     marginRight: '10px',
@@ -178,7 +176,7 @@ const styles = {
   link: {
     color: '#fff',
     textDecoration: 'none',
-    fontWeight:'600',
+    fontWeight: '600',
   },
 };
 
