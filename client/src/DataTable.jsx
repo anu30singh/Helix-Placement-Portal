@@ -1,27 +1,26 @@
 import React, { useState, useMemo } from 'react';
 import { useTable, useSortBy } from 'react-table';
-import { FaSortDown } from "react-icons/fa6";
-import { FaSortUp } from "react-icons/fa";
-import { FaSort } from "react-icons/fa6";
+import { FaSortDown, FaSortUp, FaSort } from 'react-icons/fa6';
 
-const DataTable = ({ data, columns }) => {
+const DataTable = ({ data, columns, onDelete, isAdmin }) => {
   const [pageIndex, setPageIndex] = useState(0);
-  const pageSize = 6;
+  const pageSize = 5;
 
-  // Memoize table instance to avoid unnecessary updates
   const tableInstance = useTable(
     {
-      columns,
+      columns: useMemo(() => {
+        const enhancedColumns = [...columns];
+        return enhancedColumns;
+      }, [columns, isAdmin]),
       data: useMemo(() => data.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize), [data, pageIndex]),
-      initialState: { pageIndex: 0 }, 
-      manualPagination: true, 
-      pageCount: Math.ceil(data.length / pageSize), 
+      initialState: { pageIndex: 0 },
+      manualPagination: true,
+      pageCount: Math.ceil(data.length / pageSize),
     },
     useSortBy
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
-
   const totalPages = Math.ceil(data.length / pageSize);
 
   const handlePageChange = (newPageIndex) => {
@@ -30,7 +29,7 @@ const DataTable = ({ data, columns }) => {
   };
 
   return (
-    <div className="min-w-full overflow-x-auto">
+    <div className="min-w-full ">
       <table {...getTableProps()} className="min-w-full mt-5 bg-[#17181E]">
         <thead className="bg-[#3E4396]">
           {headerGroups.map(headerGroup => (

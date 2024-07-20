@@ -40,7 +40,7 @@ const PostDrive = () => {
         try {
             const response = await axios.post('http://localhost:8000/job-listings', formData);
             console.log('Job posted successfully:', response.data);
-            // Reset form data
+            if(response.status==201) alert("Drive Posted Succesfully")
             setFormData({
                 companyName: '',
                 description: '',

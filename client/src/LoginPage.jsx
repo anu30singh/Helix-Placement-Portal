@@ -6,7 +6,7 @@ import { UserContext } from './UserContext';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student'); // Default to student role
+  const [role, setRole] = useState('student');
   const [redirect, setRedirect] = useState(false);
   const { user, setUser } = useContext(UserContext);
 

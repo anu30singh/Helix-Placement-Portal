@@ -3,7 +3,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
-const JobListing= require('./models/JobSchema')
+const JobListing = require('./models/JobSchema');
 const cookieParser = require('cookie-parser');
 const app = express();
 
@@ -80,10 +80,9 @@ app.post('/login', async (req, res) => {
         role: user.role
       });
     });
-  } else if(role !== user.role){
+  } else if (role !== user.role) {
     res.status(401).json('Access Denied');
-  }
-  else{
+  } else {
     res.status(401).json('Wrong credentials');
   }
 });
@@ -107,26 +106,50 @@ app.get('/student', authenticateToken, authorizeRole('student'), (req, res) => {
 app.post('/job-listings', async (req, res) => {
   const { companyName, description, ctc, role, qualification } = req.body;
   try {
-      const newJobListing = new JobListing({
-          companyName,
-          description,
-          ctc,
-          role,
-          qualification,
-      });
-      await newJobListing.save();
-      res.status(201).json(newJobListing);
+    const newJobListing = new JobListing({
+      companyName,
+      description,
+      ctc,
+      role,
+      qualification,
+    });
+    await newJobListing.save();
+    res.status(201).json(newJobListing);
   } catch (error) {
-      res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 });
 
 app.get('/job-listings', async (req, res) => {
   try {
-      const jobListings = await JobListing.find();
-      res.status(200).json(jobListings);
+    const jobListings = await JobListing.find();
+    res.status(200).json(jobListings);
   } catch (error) {
-      res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete('/job-listings/delete/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedJob = await JobListing.findByIdAndDelete(id);
+    if (deletedJob) {
+      res.status(200).json({ message: 'Job listing deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Job listing not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/job-listings/multiple', async (req, res) => {
+  const jobListings = req.body;
+  try {
+    const newJobListings = await JobListing.insertMany(jobListings);
+    res.status(201).json(newJobListings);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 
