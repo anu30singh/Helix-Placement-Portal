@@ -9,6 +9,9 @@ import AdminPage from './AdminPage';
 import StudentPage from './StudentPage';
 import ProtectedRoute from './ProtectedRoute';
 import Home from './Home';
+import Contact from './Contact';
+import Footer from './Footer';
+import PostDrive from './PostDrive';
 
 function App() {
   const slides = [
@@ -23,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Signup />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/" element={<Home slides={slides} autoSlide={true} autoSlideInterval={5000} />} />
           <Route path="/student" element={
             <ProtectedRoute role="student">
@@ -34,7 +38,13 @@ function App() {
               <AdminPage />
             </ProtectedRoute>
           } />
+          <Route path="/admin/post" element={
+            <ProtectedRoute role="admin">
+              <PostDrive />
+            </ProtectedRoute>
+          } />
         </Routes>
+        <Footer></Footer>
       </BrowserRouter>
     </UserContextProvider>
   );

@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
-const User = require('./models/User'); 
+const User = require('./models/User');
+const JobListing= require('./models/JobSchema')
 const cookieParser = require('cookie-parser');
 const app = express();
 
@@ -95,14 +96,38 @@ app.post('/logout', (req, res) => {
   res.cookie('token', '').json('ok');
 });
 
-// Admin routes
 app.get('/admin', authenticateToken, authorizeRole('admin'), (req, res) => {
   res.json({ message: 'Welcome to the admin portal' });
 });
 
-// Student routes
 app.get('/student', authenticateToken, authorizeRole('student'), (req, res) => {
   res.json({ message: 'Welcome to the student portal' });
+});
+
+app.post('/job-listings', async (req, res) => {
+  const { companyName, description, ctc, role, qualification } = req.body;
+  try {
+      const newJobListing = new JobListing({
+          companyName,
+          description,
+          ctc,
+          role,
+          qualification,
+      });
+      await newJobListing.save();
+      res.status(201).json(newJobListing);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+
+app.get('/job-listings', async (req, res) => {
+  try {
+      const jobListings = await JobListing.find();
+      res.status(200).json(jobListings);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
 });
 
 app.listen(8000, () => {
