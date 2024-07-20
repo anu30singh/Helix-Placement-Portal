@@ -12,6 +12,7 @@ import Home from './Home';
 import Contact from './Contact';
 import Footer from './Footer';
 import PostDrive from './PostDrive';
+import ActiveDrives from './ActiveDrives';
 
 function App() {
   const slides = [
@@ -43,6 +44,7 @@ function App() {
               <PostDrive />
             </ProtectedRoute>
           } />
+          <Route path="/drives" element={<ActiveDrives />} />
         </Routes>
         <Footer></Footer>
       </BrowserRouter>

@@ -30,14 +30,14 @@ const role=user?.role
       <Link to='/contact' className='text-[20px] font-medium font-sans text-white'>Contact</Link>
       {role === 'admin' && (
   <>
-    <Link to='/admin/drives' className='text-[20px] font-medium font-sans text-white'>Active Drives</Link>
+    <Link to='/drives' className='text-[20px] font-medium font-sans text-white'>Active Drives</Link>
     <Link to='/admin' className='text-[20px] font-medium font-sans text-white'>Dashboard</Link>
   </>
 )}
 
 {role === 'student' && (
   <>
-    <Link to='/student/drives' className='text-[20px] font-medium font-sans text-white'>Active Drives</Link>
+    <Link to='/drives' className='text-[20px] font-medium font-sans text-white'>Active Drives</Link>
     <Link to='/student/apply' className='text-[20px] font-medium font-sans text-white'>Apply</Link>
   </>
 )}
