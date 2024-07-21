@@ -70,7 +70,20 @@ const ActiveDrives = () => {
                     >
                         Delete
                     </button>
-                ) : null
+                ) :  (
+                    <div className="flex gap-3">
+                    <button
+                        className="px-4 py-2 font-medium text-white bg-indigo-500 rounded montserrat-font"
+                    >
+                        View
+                    </button>
+                    <button
+                        className="px-4 py-2 font-medium text-white bg-green-500 rounded montserrat-font"
+                    >
+                        Apply
+                    </button>
+                    </div>
+                )
             ),
         },
     ];

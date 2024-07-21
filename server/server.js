@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
 const JobListing = require('./models/JobSchema');
-const myStudent=require('./models/newSchema')
+const myStudent = require('./models/newSchema');
 const cookieParser = require('cookie-parser');
 const app = express();
 
@@ -154,14 +154,15 @@ app.post('/job-listings/multiple', async (req, res) => {
   }
 });
 
-app.post('/student-post', async (req, res) => {
-  const { firstName, lastName, contact, email, address, qualification, skills, city, board, stream, hscMarks, sscMarks } = req.body;
-  console.log(req.body); // Add this line
+// Endpoint to create a new student
+app.post('/student-post',  async (req, res) => {
+  const { username, firstName, lastName, contact, email, address, qualification, skills, city, board, stream, hscMarks, sscMarks } = req.body;
   try {
     const newStudent = new myStudent({
+      username,
       firstName,
-      lastName, 
-      contact, 
+      lastName,
+      contact,
       email,
       address,
       qualification,
@@ -174,6 +175,41 @@ app.post('/student-post', async (req, res) => {
     });
     await newStudent.save();
     res.status(201).json(newStudent);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Endpoint to update an existing student
+app.put('/student-update/:username',  async (req, res) => {
+  const { username } = req.params;
+  const { firstName, lastName, contact, email, address, qualification, skills, city, board, stream, hscMarks, sscMarks } = req.body;
+  try {
+    const updatedStudent = await myStudent.findOneAndUpdate(
+      { username },
+      { firstName, lastName, contact, email, address, qualification, skills, city, board, stream, hscMarks, sscMarks },
+      { new: true }
+    );
+    if (updatedStudent) {
+      res.status(200).json(updatedStudent);
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Endpoint to check if a student exists by username
+app.get('/student-exists/:username',  async (req, res) => {
+  const { username } = req.params;
+  try {
+    const student = await myStudent.findOne({ username });
+    if (student) {
+      res.status(200).json(student);
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
