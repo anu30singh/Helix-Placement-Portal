@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
 const JobListing = require('./models/JobSchema');
+const myStudent=require('./models/newSchema')
 const cookieParser = require('cookie-parser');
 const app = express();
 
@@ -148,6 +149,40 @@ app.post('/job-listings/multiple', async (req, res) => {
   try {
     const newJobListings = await JobListing.insertMany(jobListings);
     res.status(201).json(newJobListings);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post('/student-post', async (req, res) => {
+  const { firstName, lastName, contact, email, address, qualification, skills, city, board, stream, hscMarks, sscMarks } = req.body;
+  console.log(req.body); // Add this line
+  try {
+    const newStudent = new myStudent({
+      firstName,
+      lastName, 
+      contact, 
+      email,
+      address,
+      qualification,
+      skills,
+      city,
+      board,
+      stream,
+      hscMarks,
+      sscMarks
+    });
+    await newStudent.save();
+    res.status(201).json(newStudent);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get('/student-get', async (req, res) => {
+  try {
+    const studentData = await myStudent.find();
+    res.status(200).json(studentData);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

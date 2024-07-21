@@ -38,7 +38,7 @@ const role=user?.role
 {role === 'student' && (
   <>
     <Link to='/drives' className='text-[20px] font-medium font-sans text-white'>Active Drives</Link>
-    <Link to='/student/apply' className='text-[20px] font-medium font-sans text-white'>Apply</Link>
+    <Link to='/student' className='text-[20px] font-medium font-sans text-white'>Edit Profile</Link>
   </>
 )}
 
