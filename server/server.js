@@ -223,6 +223,19 @@ app.get('/student-get', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+app.delete('/student/delete/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedJob = await myStudent.findByIdAndDelete(id);
+    if (deletedJob) {
+      res.status(200).json({ message: 'Job listing deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Job listing not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 app.listen(8000, () => {
   console.log("server started at port 8000");

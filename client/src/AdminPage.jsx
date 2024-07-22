@@ -27,7 +27,7 @@ const AdminPage = () => {
           </div>
           <div className="flex items-center justify-center gap-3">
             <RiLogoutCircleLine size={20} className='text-white'></RiLogoutCircleLine>
-            <Link className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Student Profile</Link>
+            <Link to='/candidates' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Candidates</Link>
           </div>
           </div>
         </div>

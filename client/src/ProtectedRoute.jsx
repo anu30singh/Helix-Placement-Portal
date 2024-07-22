@@ -9,7 +9,8 @@ const ProtectedRoute = ({ children, role }) => {
     return <Navigate to="/unauthorized" />;
   }
 
-  if (user.role !== role) {
+  // Allow access if user role is either 'student' or 'admin'
+  if (!['student', 'admin'].includes(user.role)) {
     return <Navigate to="/unauthorized" />;
   }
 
