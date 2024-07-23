@@ -22,7 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 
-// Middleware for checking authentication
 const authenticateToken = (req, res, next) => {
   const { token } = req.cookies;
   if (!token) {
@@ -181,7 +180,6 @@ app.post('/student-post',  async (req, res) => {
   }
 });
 
-// Endpoint to update an existing student
 app.put('/student-update/:username',  async (req, res) => {
   const { username } = req.params;
   const { firstName, lastName, contact, email, address, qualification, skills, city, board, stream, hscMarks, sscMarks } = req.body;
@@ -262,7 +260,7 @@ app.post('/apply', async (req, res) => {
     await application.save();
     res.status(201).json({ message: 'Application submitted successfully' });
   } catch (error) {
-    console.error('Error during application submission:', error); // Log detailed error
+    console.error('Error during application submission:', error); 
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -272,8 +270,8 @@ app.post('/apply', async (req, res) => {
 app.get('/applications', async (req, res) => {
   try {
     const applications = await Application.find()
-      .populate('student') // Populate student details
-      .populate('company'); // Populate company details
+      .populate('student') 
+      .populate('company');
     res.status(200).json(applications);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -283,18 +281,48 @@ app.get('/applications/student/:username', async (req, res) => {
   const { username } = req.params;
 
   try {
-    // Find the student by username
     const student = await myStudent.findOne({ username });
     if (!student) {
       return res.status(404).json({ error: 'Student not found' });
     }
 
-    // Find applications for the found student
     const applications = await Application.find({ student: student._id })
-      .populate('student') // Populate student details
-      .populate('company'); // Populate company details
+      .populate('student') 
+      .populate('company');
 
     res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/applications/accept/:id', async (req, res) => {
+  try {
+    const application = await Application.findById(req.params.id);
+    if (!application) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+    
+    const student = await myStudent.findById(application.student);
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    
+    student.status = 'Placed';
+    await student.save();
+    res.status(200).json({ message: 'Application accepted and student placed' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/applications/reject/:id', async (req, res) => {
+  try {
+    const application = await Application.findByIdAndDelete(req.params.id);
+    if (!application) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+    res.status(200).json({ message: 'Application rejected and deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

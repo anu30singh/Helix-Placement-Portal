@@ -51,6 +51,11 @@ const thisSchema = new Schema({
       type: Number,
       required: true,
     },
+    status: {
+      type: String,
+      default: 'Not Placed',
+      required:false
+    },
   }, { timestamps: true });
 const myStudent = mongoose.model('student', thisSchema);
 module.exports = myStudent;

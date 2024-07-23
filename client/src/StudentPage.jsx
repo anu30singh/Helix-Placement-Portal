@@ -46,7 +46,7 @@ const StudentPage = () => {
   const fetchStudentData = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/student-exists/${user.username}`);
-      console.log('Fetched student data:', response.data); // Debug log
+      console.log('Fetched student data:', response.data);
       if (response.status === 200) {
         setInfo(response.data);
         setIsEditMode(true);
@@ -62,7 +62,7 @@ const StudentPage = () => {
 
   useEffect(() => {
     if (user?.username) {
-      console.log('User context:', user); // Debug log
+      console.log('User context:', user);
       fetchStudentData();
     }
   }, [user]);

@@ -69,6 +69,10 @@ const Candidates = () => {
             accessor: 'stream',
         },
         {
+            Header: 'Status',
+            accessor: 'status',
+        },
+        {
             Header: 'Actions',
             Cell: ({ row }) => (
                 isAdmin ? (
@@ -81,18 +85,7 @@ const Candidates = () => {
                 ) :''
             ),
         },
-        {
-            Header: 'Status',
-            Cell: ({ row }) => (
-                isAdmin ? (
-                    <button
-                        className="px-4 py-2 text-white rounded bg-fuchsia-600"
-                    >
-                        Not Placed
-                    </button>
-                ) :''
-            ),
-        },
+        
     ];
 
     return (
