@@ -129,6 +129,15 @@ app.get('/job-listings', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+app.get('/job-listings/count', async (req, res) => {
+  try {
+    const jobListingsCount = await JobListing.countDocuments();
+    res.status(200).json({ count: jobListingsCount });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 
 app.delete('/job-listings/delete/:id', async (req, res) => {
   const { id } = req.params;
@@ -223,6 +232,15 @@ app.get('/student-get', async (req, res) => {
   }
 });
 
+app.get('/student/count', async (req, res) => {
+  try {
+    const studentCount = await myStudent.countDocuments();
+    res.status(200).json({ count: studentCount });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 app.delete('/student/delete/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -277,6 +295,16 @@ app.get('/applications', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get('/applications/count', async (req, res) => {
+  try {
+    const applicationCount = await Application.countDocuments();
+    res.status(200).json({ count: applicationCount });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 app.get('/applications/student/:username', async (req, res) => {
   const { username } = req.params;
 

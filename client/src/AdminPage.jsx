@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoCubeSharp } from "react-icons/io5";
 import { HiUsers } from "react-icons/hi";
@@ -6,8 +6,51 @@ import { FaUserShield } from "react-icons/fa";
 import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import axios from 'axios';
 
 const AdminPage = () => {
+  const [job,setJob]=useState('')
+  const [student, setStudent] = useState('')
+  const [applications, setApplications] = useState('')
+  const fetchJobs=async()=>{
+    try {
+      const response=await axios.get('http://localhost:8000/job-listings/count')
+      console.log('Fetched job count:', response.data);
+      if (response.status === 200) {
+        setJob(response.data);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const fetchStudents=async()=>{
+    try {
+      const response=await axios.get('http://localhost:8000/student/count')
+      console.log('Fetched student count:', response.data);
+      if (response.status === 200) {
+        setStudent(response.data);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const fetchApplications=async()=>{
+    try {
+      const response=await axios.get('http://localhost:8000/applications/count')
+      console.log('Fetched application count:', response.data);
+      if (response.status === 200) {
+        setApplications(response.data);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    fetchJobs();
+    fetchStudents();
+    fetchApplications();
+  },[])
+  
   return (
     <div className='w-full h-screen pl-12 pr-6 pt-12 pb-3 flex bg-[#17181E]'>
         <div className="flex flex-col items-center justify-start gap-10 px-3 pt-10 rounded-xl pb-3 ml-4 bg-purple-500 h-[510px] w-60">
@@ -40,7 +83,7 @@ const AdminPage = () => {
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
                 <p className="uppercase text-white font-sans text-[14px] font-light">applications</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{applications.count}</p>
               </div>
             </div>
             <div className="flex">
@@ -58,7 +101,7 @@ const AdminPage = () => {
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
                 <p className="uppercase text-white font-sans text-[14px] font-light">registered students</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{student.count}</p>
               </div>
             </div>
             <div className="flex">
@@ -67,7 +110,7 @@ const AdminPage = () => {
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
                 <p className="uppercase text-white font-sans text-[14px] font-light">placement drives</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{job.count}</p>
               </div>
             </div>
             <div className="flex">
