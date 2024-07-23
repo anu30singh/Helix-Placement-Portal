@@ -110,7 +110,7 @@ const StudentPage = () => {
           </div>
           <div className="flex items-center justify-center gap-3">
             <BsFillSuitcaseLgFill size={20} className='text-white'></BsFillSuitcaseLgFill>
-            <Link to='/student/mail' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Mailbox</Link>
+            <Link to='/drive/applications' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Applications</Link>
           </div>
           <div className="flex items-center justify-center gap-3">
             <HiUsers size={20} className='text-white'></HiUsers>

@@ -14,6 +14,7 @@ import Footer from './Footer';
 import PostDrive from './PostDrive';
 import ActiveDrives from './ActiveDrives';
 import Candidates from './Candidates';
+import ApplicationsPage from './ApplicationsPage';
 
 function App() {
   const slides = [
@@ -53,6 +54,11 @@ function App() {
           <Route path="/candidates" element={
             <ProtectedRoute role={['student','admin']}>
             <Candidates />
+          </ProtectedRoute>
+          }  />
+          <Route path="/drive/applications" element={
+            <ProtectedRoute role={['student','admin']}>
+            <ApplicationsPage />
           </ProtectedRoute>
           }  />
         </Routes>

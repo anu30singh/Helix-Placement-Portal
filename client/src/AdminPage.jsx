@@ -23,7 +23,7 @@ const AdminPage = () => {
           </div>
           <div className="flex items-center justify-center gap-3">
             <HiUsers size={20} className='text-white'></HiUsers>
-            <Link to='/admin/coordinators' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Co-Ordinators</Link>
+            <Link to='/drive/applications' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Applictions</Link>
           </div>
           <div className="flex items-center justify-center gap-3">
             <RiLogoutCircleLine size={20} className='text-white'></RiLogoutCircleLine>
@@ -39,7 +39,7 @@ const AdminPage = () => {
                 <BsFillSuitcaseLgFill size={30} className='text-white'></BsFillSuitcaseLgFill>
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
-                <p className="uppercase text-white font-sans text-[14px] font-light">co-ordinators</p>
+                <p className="uppercase text-white font-sans text-[14px] font-light">applications</p>
                 <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
               </div>
             </div>

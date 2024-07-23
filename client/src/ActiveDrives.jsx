@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import DataTable from './DataTable';
 import axios from 'axios';
 import { UserContext } from './UserContext';
+import ApplyButton from './ApplyButton';
 
 const ActiveDrives = () => {
     const [value, setValue] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const role = user?.role;
 
     const fetchData = async () => {
@@ -31,9 +32,9 @@ const ActiveDrives = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res=await axios.delete(`http://localhost:8000/job-listings/delete/${id}`);
+            const res = await axios.delete(`http://localhost:8000/job-listings/delete/${id}`);
             setValue(prevValue => prevValue.filter(item => item._id !== id));
-            if(res.status==200) alert("Job deleted successfully")
+            if (res.status === 200) alert("Job deleted successfully");
         } catch (error) {
             console.log("Error deleting item:", error.message);
         }
@@ -70,18 +71,14 @@ const ActiveDrives = () => {
                     >
                         Delete
                     </button>
-                ) :  (
+                ) : (
                     <div className="flex gap-3">
-                    <button
-                        className="px-4 py-2 font-medium text-white bg-indigo-500 rounded montserrat-font"
-                    >
-                        View
-                    </button>
-                    <button
-                        className="px-4 py-2 font-medium text-white bg-green-500 rounded montserrat-font"
-                    >
-                        Apply
-                    </button>
+                        <button
+                            className="px-4 py-2 font-medium text-white bg-indigo-500 rounded montserrat-font"
+                        >
+                            View
+                        </button>
+                        <ApplyButton jobId={row.original._id} username={user?.username} />
                     </div>
                 )
             ),

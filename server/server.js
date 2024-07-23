@@ -5,6 +5,7 @@ const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
 const JobListing = require('./models/JobSchema');
 const myStudent = require('./models/newSchema');
+const Application = require('./models/ApplicationSchema');
 const cookieParser = require('cookie-parser');
 const app = express();
 
@@ -223,6 +224,7 @@ app.get('/student-get', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
 app.delete('/student/delete/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -232,6 +234,47 @@ app.delete('/student/delete/:id', async (req, res) => {
     } else {
       res.status(404).json({ message: 'Job listing not found' });
     }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route to handle student applications
+app.post('/apply', async (req, res) => {
+  const { jobId, username } = req.body;
+
+  if (!jobId || !username) {
+    return res.status(400).json({ error: 'Missing jobId or username' });
+  }
+
+  try {
+    const student = await myStudent.findOne({ username });
+    
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    
+    const application = new Application({
+      company: jobId,
+      student: student._id,
+    });
+
+    await application.save();
+    res.status(201).json({ message: 'Application submitted successfully' });
+  } catch (error) {
+    console.error('Error during application submission:', error); // Log detailed error
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+app.get('/applications', async (req, res) => {
+  try {
+    const applications = await Application.find()
+      .populate('student') // Populate student details
+      .populate('company'); // Populate company details
+    res.status(200).json(applications);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
