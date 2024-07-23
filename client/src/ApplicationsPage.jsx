@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from './UserContext';
+import DataTable from './DataTable';
 
 const ApplicationsPage = () => {
   const [applications, setApplications] = useState([]);
@@ -11,10 +12,18 @@ const ApplicationsPage = () => {
       try {
         if (user.role === 'admin') {
           const response = await axios.get('http://localhost:8000/applications');
-          setApplications(response.data);
+          const dataWithIds = response.data.map((item, index) => ({
+            ...item,
+            serialNumber: index + 1,
+        }));
+          setApplications(dataWithIds);
         } else {
           const response = await axios.get(`http://localhost:8000/applications/student/${user.username}`);
-          setApplications(response.data);
+          const dataWithIds = response.data.map((item, index) => ({
+            ...item,
+            serialNumber: index + 1,
+        }));
+          setApplications(dataWithIds);
         }
       } catch (error) {
         console.error('Failed to fetch applications:', error);
@@ -26,16 +35,57 @@ const ApplicationsPage = () => {
     }
   }, [user]);
 
+  const jobColumns = [
+    {
+        Header: 'ID',
+        accessor: 'serialNumber',
+    },
+    {
+      Header: 'First Name',
+      accessor: 'student.firstName',
+  },
+  {
+      Header: 'Last Name',
+      accessor: 'student.lastName',
+  },
+    {
+        Header: 'Company Name',
+        accessor: 'company.companyName',
+    },
+    {
+        Header: 'CTC',
+        accessor: 'company.ctc',
+    },
+    {
+        Header: 'Role',
+        accessor: 'company.role',
+    },
+    {
+        Header: 'Actions',
+        Cell: ({ row }) => (
+          user.role === 'admin' ? (
+              <div className="flex gap-2">
+                <button
+                    className="px-4 py-2 text-white bg-green-600 rounded"
+                >
+                    Accept
+                </button>
+                <button
+                    className="px-4 py-2 text-white bg-red-600 rounded"
+                >
+                    Reject
+                </button>
+                </div>
+
+            ) :''
+        ),
+    },
+];
+
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center bg-[#17181E]">
-      <h1 className='font-semibold mt-8 montserrat-font text-[28px] text-white/85'>Student Applications</h1>
-      <ul>
-        {applications.map((application) => (
-          <li className='font-sans text-lg font-normal text-white' key={application._id}>
-            {application.student.firstName} {application.student.lastName} applied to {application.company.companyName}
-          </li>
-        ))}
-      </ul>
+    <div className="w-full h-screen justify-start items-start flex-col pl-12 pr-6 pt-12 pb-3 flex bg-[#17181E]">
+      <h1 className='font-semibold mt-4 montserrat-font text-[28px] ml-3 text-zinc-100'>Student Applications</h1>
+      <DataTable columns={jobColumns} data={applications}  />
     </div>
   );
 };
