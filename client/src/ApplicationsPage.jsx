@@ -1,21 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { UserContext } from './UserContext';
 
 const ApplicationsPage = () => {
   const [applications, setApplications] = useState([]);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/applications');
-        setApplications(response.data);
+        if (user.role === 'admin') {
+          const response = await axios.get('http://localhost:8000/applications');
+          setApplications(response.data);
+        } else {
+          const response = await axios.get(`http://localhost:8000/applications/student/${user.username}`);
+          setApplications(response.data);
+        }
       } catch (error) {
         console.error('Failed to fetch applications:', error);
       }
     };
 
-    fetchApplications();
-  }, []);
+    if (user) {
+      fetchApplications();
+    }
+  }, [user]);
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center bg-[#17181E]">

@@ -279,6 +279,26 @@ app.get('/applications', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.get('/applications/student/:username', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    // Find the student by username
+    const student = await myStudent.findOne({ username });
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    // Find applications for the found student
+    const applications = await Application.find({ student: student._id })
+      .populate('student') // Populate student details
+      .populate('company'); // Populate company details
+
+    res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 app.listen(8000, () => {
   console.log("server started at port 8000");
