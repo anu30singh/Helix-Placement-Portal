@@ -1,8 +1,10 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
+const Contact=require('./models/contactSchema')
 const JobListing = require('./models/JobSchema');
 const myStudent = require('./models/newSchema');
 const Application = require('./models/ApplicationSchema');
@@ -11,7 +13,7 @@ const app = express();
 
 app.use(cookieParser());
 
-const secret = "strongKey"; // Store this securely
+const secret = process.env.JWT_SECRET;
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -47,6 +49,23 @@ const authorizeRole = (role) => {
 };
 
 // Routes
+app.post('/contact', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const newContact = new Contact({ name, email, message });
+    await newContact.save();
+    res.status(201).json({ message: 'Contact form submitted successfully' });
+  } catch (error) {
+    console.error('Error during contact form submission:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("Server is Running");
 });
@@ -255,7 +274,6 @@ app.delete('/student/delete/:id', async (req, res) => {
   }
 });
 
-// Route to handle student applications
 app.post('/apply', async (req, res) => {
   const { jobId, username } = req.body;
 
@@ -268,6 +286,15 @@ app.post('/apply', async (req, res) => {
     
     if (!student) {
       return res.status(404).json({ error: 'Student not found' });
+    }
+
+    if (student.status === 'Placed') {
+      return res.status(403).json({ error: 'Student is already placed and cannot apply for jobs' });
+    }
+
+    const existingApplication = await Application.findOne({ company: jobId, student: student._id });
+    if (existingApplication) {
+      return res.status(409).json({ error: 'Student has already applied to this job' });
     }
     
     const application = new Application({
@@ -282,6 +309,7 @@ app.post('/apply', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
@@ -330,19 +358,22 @@ app.post('/applications/accept/:id', async (req, res) => {
     if (!application) {
       return res.status(404).json({ error: 'Application not found' });
     }
-    
+
     const student = await myStudent.findById(application.student);
     if (!student) {
       return res.status(404).json({ error: 'Student not found' });
     }
-    
+
     student.status = 'Placed';
     await student.save();
-    res.status(200).json({ message: 'Application accepted and student placed' });
+    await Application.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: 'Application accepted, student placed, and application deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 app.delete('/applications/reject/:id', async (req, res) => {
   try {

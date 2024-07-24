@@ -9,9 +9,23 @@ const ApplyButton = ({ jobId, username }) => {
         alert('Application submitted successfully');
       }
     } catch (error) {
-      console.error('Failed to submit application:', error);
+      if (error.response) {
+        if (error.response.status === 403) {
+          alert('You are already placed and cannot apply for jobs');
+        } else if (error.response.status === 409) {
+          alert('You have already applied to this job');
+        } else if (error.response.status === 404) {
+          alert('Student not found');
+        } else {
+          alert('Failed to submit application');
+        }
+      } else {
+        console.error('Failed to submit application:', error);
+        alert('An unexpected error occurred');
+      }
     }
   };
+  
 
   return (
     <button
