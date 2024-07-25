@@ -65,7 +65,7 @@ const Contact = () => {
           </div>
           <div className="w-80 h-[1px] bg-white/65"></div>
         </div>
-        <div className="w-[70%] h-[500px] px-10 py-8 bg-purple-500 rounded-xl">
+        <div className="w-[70%] h-[500px] px-10 py-8 bg-black/10 ring-1 ring-black shadow-xl shadow-rgba(255, 255, 255, 0.3) backdrop-blur-md rounded-xl">
           <form className='flex flex-col gap-2' onSubmit={handleSubmit}>
             <h3 className="mb-4 font-serif text-lg font-light text-white text-opacity-75">Looking for an excellent business idea?</h3>
             <input 
@@ -96,7 +96,7 @@ const Contact = () => {
             ></textarea>
             <button 
               type="submit"
-              className="pr-8 pl-7 py-2 font-medium text-white montserrat-font w-28 text-opacity-75 bg-[#17181E] rounded-xl">
+              className="pr-8 pl-7 py-2 hover:bg-white hover:text-black font-medium text-white montserrat-font w-28  border-[1px] border-solid border-white/70 text-opacity-75 bg-[#17181E] rounded-xl">
               Submit
             </button>
           </form>
