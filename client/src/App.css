@@ -11,3 +11,38 @@
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
 }
+.calendar-container {
+  margin: 20px;
+  padding: 20px;
+}
+
+.calendar-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.schedule-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.schedule-button:hover {
+  background-color: #0056b3;
+}
+
+.fc-daygrid-day, .fc-timegrid-slot {
+  border: 1px solid #ddd;
+}
+
+.fc-daygrid-day.fc-day-today {
+  background-color: #e7f1ff;
+}
+

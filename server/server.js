@@ -374,6 +374,57 @@ app.post('/applications/accept/:id', async (req, res) => {
   }
 });
 
+app.post('/applications/accept-app/:id', async (req, res) => {
+  try {
+    const application = await Application.findById(req.params.id);
+    if (!application) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+
+    const student = await myStudent.findById(application.student);
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    student.status = 'Interview Scheduled';
+    await student.save();
+
+    res.status(200).json({ message: 'Application accepted', application });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Example of a POST endpoint for scheduling interviews
+app.post('/interviews', async (req, res) => {
+  const { applicationId, interviewDate } = req.body;
+
+  try {
+    const application = await Application.findById(applicationId);
+    if (!application) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+
+    application.interviewDate = interviewDate;
+    await application.save();
+
+    res.status(201).json({ message: 'Interview scheduled successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/interviews', async (req, res) => {
+  try {
+    const interviews = await Application.find({ interviewDate: { $exists: true } })
+      .populate('student')
+      .populate('company');
+    res.status(200).json(interviews);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 app.delete('/applications/reject/:id', async (req, res) => {
   try {
@@ -386,7 +437,6 @@ app.delete('/applications/reject/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-app.listen(8000, () => {
-  console.log("server started at port 8000");
-});

@@ -15,6 +15,7 @@ import PostDrive from './PostDrive';
 import ActiveDrives from './ActiveDrives';
 import Candidates from './Candidates';
 import ApplicationsPage from './ApplicationsPage';
+import InterviewScheduler from './InterviewScheduler';
 
 function App() {
   const slides = [
@@ -44,6 +45,11 @@ function App() {
           <Route path="/admin/post" element={
             <ProtectedRoute role="admin">
               <PostDrive />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/interview" element={
+            <ProtectedRoute role="admin">
+              <InterviewScheduler />
             </ProtectedRoute>
           } />
           <Route path="/drives" element={

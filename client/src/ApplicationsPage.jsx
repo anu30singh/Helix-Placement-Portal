@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from './UserContext';
 import DataTable from './DataTable';
+import { useNavigate } from 'react-router-dom';
 
 const ApplicationsPage = () => {
   const [applications, setApplications] = useState([]);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -30,13 +32,17 @@ const ApplicationsPage = () => {
     }
   }, [user]);
 
-  const handleAccept = async (id) => {
+  const handleAccept = async (application) => {
     try {
-      await axios.post(`http://localhost:8000/applications/accept/${id}`);
-      alert('Application accepted and student placed');
-      setApplications(applications.filter(application => application._id !== id));
+      const response = await axios.post(`http://localhost:8000/applications/accept-app/${application._id}`);
+      if (response.status === 200) {
+        navigate('/admin/interview', { state: { application: response.data.application } });
+        setApplications(applications.filter(app => app._id !== application._id));
+        alert("Application accepted");
+      }
     } catch (error) {
-      console.error('Failed to accept application:', error);
+      console.error('Error accepting application:', error);
+      alert('Error accepting application');
     }
   };
 
@@ -47,6 +53,7 @@ const ApplicationsPage = () => {
       setApplications(applications.filter(application => application._id !== id));
     } catch (error) {
       console.error('Failed to reject application:', error);
+      alert('Failed to reject application');
     }
   };
 
@@ -62,7 +69,7 @@ const ApplicationsPage = () => {
       Cell: ({ row }) => (
         user.role === 'admin' ? (
           <div className="flex gap-2">
-            <button className="px-4 py-2 text-white bg-green-600 rounded" onClick={() => handleAccept(row.original._id)}>
+            <button className="px-4 py-2 text-white bg-green-600 rounded" onClick={() => handleAccept(row.original)}>
               Accept
             </button>
             <button className="px-4 py-2 text-white bg-red-600 rounded" onClick={() => handleReject(row.original._id)}>
@@ -75,8 +82,8 @@ const ApplicationsPage = () => {
   ];
 
   return (
-    <div className="w-full h-screen justify-start items-start flex-col pl-12 pr-6 pt-12 pb-3 flex bg-[#17181E]">
-      <h1 className='font-semibold mt-4 montserrat-font text-[28px] ml-3 text-zinc-100'>Student Applications</h1>
+    <div className="w-full h-screen flex flex-col pl-12 pr-6 pt-12 pb-3 bg-[#17181E]">
+      <h1 className='font-semibold mt-4 text-[28px] text-zinc-100'>Student Applications</h1>
       <DataTable columns={jobColumns} data={applications} />
     </div>
   );
