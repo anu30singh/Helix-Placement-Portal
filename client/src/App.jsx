@@ -16,6 +16,7 @@ import ActiveDrives from './ActiveDrives';
 import Candidates from './Candidates';
 import ApplicationsPage from './ApplicationsPage';
 import InterviewScheduler from './InterviewScheduler';
+import Unauthorized from './Unauthorized';
 
 function App() {
   const slides = [
@@ -31,6 +32,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/" element={<Home slides={slides} autoSlide={true} autoSlideInterval={5000} />} />
           <Route path="/student" element={
             <ProtectedRoute role="student">

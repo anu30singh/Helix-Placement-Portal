@@ -74,7 +74,7 @@ const Contact = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Name" 
-              className="text-black placeholder:text-white px-4 py-2 mb-4 w-full bg-transparent border-[1px] border-solid border-white/70" 
+              className="text-white placeholder:text-white px-4 py-2 mb-4 w-full bg-transparent border-[1px] border-solid border-white/70" 
               required
             />
             <input 
@@ -83,7 +83,7 @@ const Contact = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email" 
-              className="text-black placeholder:text-white px-4 py-2 mb-4 w-full bg-transparent border-[1px] border-solid border-white/70" 
+              className="text-white placeholder:text-white px-4 py-2 mb-4 w-full bg-transparent border-[1px] border-solid border-white/70" 
               required
             />
             <textarea 
@@ -91,7 +91,7 @@ const Contact = () => {
               value={formData.message}
               onChange={handleChange}
               placeholder="Submit Message" 
-              className="text-black placeholder:text-white px-4 py-2 mb-4 w-full h-32 bg-transparent border-[1px] border-solid border-white/70" 
+              className="text-white placeholder:text-white px-4 py-2 mb-4 w-full h-32 bg-transparent border-[1px] border-solid border-white/70" 
               required
             ></textarea>
             <button 

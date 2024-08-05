@@ -116,10 +116,10 @@ const StudentPage = () => {
             <HiUsers size={20} className='text-white'></HiUsers>
             <Link to='/candidates' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Candidates</Link>
           </div>
-          <div className="flex items-center justify-center gap-3">
+         {/*  <div className="flex items-center justify-center gap-3">
             <RiLogoutCircleLine size={20} className='text-white'></RiLogoutCircleLine>
             <Link className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Student Profile</Link>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="flex rounded-xl flex-col items-start gap-6 justify-start h-full w-[900px] py-4 pl-10 pr-3 ml-3 bg-purple-500">
