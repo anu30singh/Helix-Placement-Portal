@@ -9,6 +9,8 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import axios from 'axios';
 import { UserContext } from './UserContext';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const StudentPage = () => {
   const [info, setInfo] = useState({
     firstName: '',
@@ -45,7 +47,7 @@ const StudentPage = () => {
 
   const fetchStudentData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/student-exists/${user.username}`);
+      const response = await axios.get(`${API_URL}/student-exists/${user.username}`);
       console.log('Fetched student data:', response.data);
       if (response.status === 200) {
         setInfo(response.data);
@@ -72,11 +74,11 @@ const StudentPage = () => {
     try {
       const studentData = { ...info, username: user.username };
       if (isEditMode) {
-        const response = await axios.put(`http://localhost:8000/student-update/${user.username}`, studentData);
+        const response = await axios.put(`${API_URL}/student-update/${user.username}`, studentData);
         console.log('Student updated successfully:', response.data);
         if (response.status === 200) alert("Profile updated successfully");
       } else {
-        const response = await axios.post('http://localhost:8000/student-post', studentData);
+        const response = await axios.post(`${API_URL}/student-post`, studentData);
         console.log('Student added successfully:', response.data);
         if (response.status === 201) alert("Profile created successfully");
       }

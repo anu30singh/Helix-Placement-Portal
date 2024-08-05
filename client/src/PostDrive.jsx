@@ -10,6 +10,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const PostDrive = () => {
     const [formData, setFormData] = useState({
         companyName: '',
@@ -38,7 +40,7 @@ const PostDrive = () => {
     const postJob = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/job-listings', formData);
+            const response = await axios.post(`${API_URL}/job-listings`, formData);
             console.log('Job posted successfully:', response.data);
             if(response.status==201) alert("Drive Posted Succesfully")
             setFormData({

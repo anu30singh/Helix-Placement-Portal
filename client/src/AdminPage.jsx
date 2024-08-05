@@ -8,13 +8,15 @@ import { MdDashboard } from "react-icons/md";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import axios from 'axios';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const AdminPage = () => {
   const [job,setJob]=useState('')
   const [student, setStudent] = useState('')
   const [applications, setApplications] = useState('')
   const fetchJobs=async()=>{
     try {
-      const response=await axios.get('http://localhost:8000/job-listings/count')
+      const response=await axios.get(`${API_URL}/job-listings/count`)
       console.log('Fetched job count:', response.data);
       if (response.status === 200) {
         setJob(response.data);
@@ -25,7 +27,7 @@ const AdminPage = () => {
   }
   const fetchStudents=async()=>{
     try {
-      const response=await axios.get('http://localhost:8000/student/count')
+      const response=await axios.get(`${API_URL}/student/count`)
       console.log('Fetched student count:', response.data);
       if (response.status === 200) {
         setStudent(response.data);
@@ -36,7 +38,7 @@ const AdminPage = () => {
   }
   const fetchApplications=async()=>{
     try {
-      const response=await axios.get('http://localhost:8000/applications/count')
+      const response=await axios.get(`${API_URL}/applications/count`)
       console.log('Fetched application count:', response.data);
       if (response.status === 200) {
         setApplications(response.data);

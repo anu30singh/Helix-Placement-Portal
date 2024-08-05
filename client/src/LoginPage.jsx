@@ -3,6 +3,9 @@ import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
+
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +17,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/login', {
+      const response = await axios.post(`${API_URL}/login`, {
         username,
         password,
         role,

@@ -4,6 +4,8 @@ import { UserContext } from './UserContext';
 import DataTable from './DataTable';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const ApplicationsPage = () => {
   const [applications, setApplications] = useState([]);
   const { user } = useContext(UserContext);
@@ -13,8 +15,8 @@ const ApplicationsPage = () => {
     const fetchApplications = async () => {
       try {
         const response = user.role === 'admin'
-          ? await axios.get('http://localhost:8000/applications')
-          : await axios.get(`http://localhost:8000/applications/student/${user.username}`);
+          ? await axios.get(`${API_URL}/applications`)
+          : await axios.get(`${API_URL}/applications/student/${user.username}`);
           
         const dataWithIds = response.data.map((item, index) => ({
           ...item,
@@ -34,7 +36,7 @@ const ApplicationsPage = () => {
 
   const handleAccept = async (application) => {
     try {
-      const response = await axios.post(`http://localhost:8000/applications/accept-app/${application._id}`);
+      const response = await axios.post(`${API_URL}/applications/accept-app/${application._id}`);
       if (response.status === 200) {
         navigate('/admin/interview', { state: { application: response.data.application } });
         setApplications(applications.filter(app => app._id !== application._id));
@@ -48,7 +50,7 @@ const ApplicationsPage = () => {
 
   const handleReject = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/applications/reject/${id}`);
+      await axios.delete(`${API_URL}/applications/reject/${id}`);
       alert('Application rejected and deleted');
       setApplications(applications.filter(application => application._id !== id));
     } catch (error) {

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { UserContext } from './UserContext';
 import ApplyButton from './ApplyButton';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const ActiveDrives = () => {
     const [value, setValue] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -12,7 +14,7 @@ const ActiveDrives = () => {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/job-listings');
+            const res = await axios.get(`${API_URL}/job-listings`);
             const dataWithIds = res.data.map((item, index) => ({
                 ...item,
                 serialNumber: index + 1,
@@ -32,7 +34,7 @@ const ActiveDrives = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res = await axios.delete(`http://localhost:8000/job-listings/delete/${id}`);
+            const res = await axios.delete(`${API_URL}/job-listings/delete/${id}`);
             setValue(prevValue => prevValue.filter(item => item._id !== id));
             if (res.status === 200) alert("Job deleted successfully");
         } catch (error) {

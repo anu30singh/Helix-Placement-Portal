@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { UserContext } from './UserContext'
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const Demo = () => {
     const{user,setUser}=useContext(UserContext)
   useEffect(()=>{
-    fetch(`http://localhost:8000/profile`,{
+    fetch(`${API_URL}/profile`,{
       credentials:'include'
     }).then(response=>{
       response.json().then(user=>{
@@ -14,7 +16,7 @@ const Demo = () => {
     })
   },[])
   function logout() {
-    fetch('http://localhost:8000/logout',{
+    fetch(`${API_URL}/logout`,{
       credentials :'include',
       method:'POST',
     })

@@ -6,6 +6,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const Calendar = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const location = useLocation();
@@ -16,7 +18,7 @@ const Calendar = () => {
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/interviews');
+        const response = await axios.get(`${API_URL}/interviews`);
         const events = response.data.map((event) => ({
           id: event._id,
           title: 'Interview',
@@ -70,7 +72,7 @@ const Calendar = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/interviews', {
+      const response = await axios.post(`${API_URL}/interviews`, {
         applicationId: application._id,
         interviewDate: selectedSlot,
       });

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,7 +13,7 @@ const Signup = () => {
   const register = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/register', {
+      const response = await axios.post(`${API_URL}/register`, {
         username: username,
         password: password,
         role: role, // Include role in the request body

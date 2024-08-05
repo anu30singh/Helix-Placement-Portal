@@ -1,10 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const ApplyButton = ({ jobId, username }) => {
   const handleApply = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/apply', { jobId, username });
+      const response = await axios.post(`${API_URL}/apply`, { jobId, username });
       if (response.status === 201) {
         alert('Application submitted successfully');
       }

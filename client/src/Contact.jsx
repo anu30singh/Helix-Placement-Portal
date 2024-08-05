@@ -4,6 +4,8 @@ import { IoIosMail } from "react-icons/io";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -22,7 +24,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/contact', formData);
+      const response = await axios.post(`${API_URL}/contact`, formData);
       if (response.status === 201) {
         alert('Contact form submitted successfully');
         setFormData({ name: '', email: '', message: '' });

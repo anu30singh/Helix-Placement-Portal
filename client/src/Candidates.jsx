@@ -3,6 +3,8 @@ import DataTable from './DataTable';
 import axios from 'axios';
 import { UserContext } from './UserContext';
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 const Candidates = () => {
     const [value, setValue] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -11,7 +13,7 @@ const Candidates = () => {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/student-get');
+            const res = await axios.get(`${API_URL}/student-get`);
             const dataWithIds = res.data.map((item, index) => ({
                 ...item,
                 serialNumber: index + 1,
@@ -31,7 +33,7 @@ const Candidates = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res=await axios.delete(`http://localhost:8000/student/delete/${id}`);
+            const res=await axios.delete(`${API_URL}/student/delete/${id}`);
             setValue(prevValue => prevValue.filter(item => item._id !== id));
             if(res.status==200) alert("Candidate deleted successfully")
         } catch (error) {
