@@ -4,6 +4,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
+const AdminRequest=require('./models/AdminRequest')
 const Contact=require('./models/contactSchema')
 const JobListing = require('./models/JobSchema');
 const myStudent = require('./models/newSchema');
@@ -71,17 +72,67 @@ app.get("/", (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
+  const { username, password, role } = req.body;
+
   try {
-    const { username, password, role } = req.body;
-    const newUser = new User({
-      username,
-      password,
-      role
-    });
-    await newUser.save();
-    res.status(201).json({ message: 'Registration successful' });
+    
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    if (role === 'admin') {
+      
+      const newAdminRequest = new AdminRequest({ username, password, status: 'pending' });
+      await newAdminRequest.save();
+
+      res.status(202).json({ message: 'Admin request submitted, waiting for approval.' });
+    } else {
+      
+      const newUser = new User({ username, password, role });
+      await newUser.save();
+
+      res.status(201).json({ message: 'Registration successful.' });
+    }
   } catch (error) {
-    res.status(500).json({ error: "Registration failed" });
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+app.get('/admin-requests', async (req, res) => {
+  try {
+    const requests = await AdminRequest.find({ status: 'pending' });
+    res.status(200).json(requests);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+app.post('/handle-admin-request', async (req, res) => {
+  const { id, action } = req.body;
+
+  try {
+    const request = await AdminRequest.findById(id);
+
+    if (!request || request.status !== 'pending') {
+      return res.status(400).json({ message: 'Invalid request' });
+    }
+
+    if (action === 'accept') {
+      const newUser = new User({ username: request.username, password: request.password, role: 'admin' });
+      await newUser.save();
+
+      request.status = 'accepted';
+      await request.save();
+
+    } else if (action === 'reject') {
+      request.status = 'rejected';
+      await request.save();
+    }
+
+    res.status(200).json({ message: `Admin request ${action}ed successfully.` });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 

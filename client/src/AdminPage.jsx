@@ -6,6 +6,7 @@ import { FaUserShield } from "react-icons/fa";
 import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { PiStudentDuotone } from "react-icons/pi";
 import axios from 'axios';
 
 const API_URL=import.meta.env.VITE_API_URL;
@@ -13,7 +14,11 @@ const API_URL=import.meta.env.VITE_API_URL;
 const AdminPage = () => {
   const [job,setJob]=useState('')
   const [student, setStudent] = useState('')
-  const [applications, setApplications] = useState('')
+  const [applications, setApplications] = useState([])
+  const [uniqueStudentCount, setUniqueStudentCount] = useState(0)
+  const [uniqueInterviewCount, setUniqueInterviewCount] = useState(0)
+  const [requests, setRequests] = useState([]);
+
   const fetchJobs=async()=>{
     try {
       const response=await axios.get(`${API_URL}/job-listings/count`)
@@ -25,6 +30,14 @@ const AdminPage = () => {
       console.log(error)
     }
   }
+  const fetchRequests = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/admin-requests`);
+      setRequests(response.data);
+    } catch (error) {
+      console.error('Error fetching admin requests:', error);
+    }
+  };
   const fetchStudents=async()=>{
     try {
       const response=await axios.get(`${API_URL}/student/count`)
@@ -36,22 +49,44 @@ const AdminPage = () => {
       console.log(error)
     }
   }
-  const fetchApplications=async()=>{
+  const fetchApplications = async () => {
     try {
-      const response=await axios.get(`${API_URL}/applications/count`)
-      console.log('Fetched application count:', response.data);
+      const response = await axios.get(`${API_URL}/applications`) // Adjust endpoint to fetch full data
+      console.log('Fetched applications:', response.data);
       if (response.status === 200) {
-        setApplications(response.data);
+        setApplications(response.data); // Assume response contains an array of applications
       }
     } catch (error) {
       console.log(error)
     }
   }
+
+  const countUniqueStudents = () => {
+    const studentIds = new Set(applications.map(app => app.student.username));
+    setUniqueStudentCount(studentIds.size);
+  };
+
+  const countInterviews = () => {
+    const interviewTotal = new Set(applications.map(app => app.interviewDate));
+    setUniqueInterviewCount(interviewTotal.size);
+  };
+
   useEffect(() => {
     fetchJobs();
     fetchStudents();
     fetchApplications();
-  },[])
+    fetchRequests();
+  }, [])
+
+  useEffect(() => {
+    if (applications.length) {
+      countUniqueStudents();
+    }
+    if (applications.length) {
+      countInterviews();
+    }
+  }, [applications])
+  
   
   return (
     <div className='w-full h-screen pl-12 pr-6 pt-12 pb-3 flex bg-[#17181E]'>
@@ -71,8 +106,12 @@ const AdminPage = () => {
             <Link to='/drive/applications' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Applictions</Link>
           </div>
           <div className="flex items-center justify-center gap-3">
-            <RiLogoutCircleLine size={20} className='text-white'></RiLogoutCircleLine>
+            <PiStudentDuotone size={20} className='text-white'></PiStudentDuotone>
             <Link to='/candidates' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Candidates</Link>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <FaUserShield size={20} className='text-white'></FaUserShield>
+            <Link to='/handle-admin' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Co-ordinators</Link>
           </div>
           </div>
         </div>
@@ -85,7 +124,7 @@ const AdminPage = () => {
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
                 <p className="uppercase text-white font-sans text-[14px] font-light">applications</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">{applications.count}</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{applications.length}</p>
               </div>
             </div>
             <div className="flex">
@@ -94,7 +133,7 @@ const AdminPage = () => {
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
                 <p className="uppercase text-white font-sans text-[14px] font-light">pending co-ordinator approval</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{requests.length}</p>
               </div>
             </div>
             <div className="flex">
@@ -121,7 +160,7 @@ const AdminPage = () => {
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
                 <p className="uppercase text-white font-sans text-[14px] font-light">interviews</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{uniqueInterviewCount}</p>
               </div>
             </div>
             <div className="flex">
@@ -129,8 +168,8 @@ const AdminPage = () => {
                 <IoCubeSharp size={30} className='text-white'></IoCubeSharp>
               </div>
               <div className="flex flex-col items-start justify-start h-24 gap-1 pt-4 pl-5 bg-[#17181E] w-80">
-                <p className="uppercase text-white font-sans text-[14px] font-light">total drive applicants</p>
-                <p className="uppercase text-white font-sans text-[14px] font-bold">0</p>
+                <p className="uppercase text-white font-sans text-[14px] font-light">current drive applicants</p>
+                <p className="uppercase text-white font-sans text-[14px] font-bold">{uniqueStudentCount}</p>
               </div>
             </div>
           </div>

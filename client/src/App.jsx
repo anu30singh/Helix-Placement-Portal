@@ -17,6 +17,7 @@ import Candidates from './Candidates';
 import ApplicationsPage from './ApplicationsPage';
 import InterviewScheduler from './InterviewScheduler';
 import Unauthorized from './Unauthorized';
+import AdminRequests from './AdminRequest';
 
 function App() {
   const slides = [
@@ -52,6 +53,11 @@ function App() {
           <Route path="/admin/interview" element={
             <ProtectedRoute role="admin">
               <InterviewScheduler />
+            </ProtectedRoute>
+          } />
+          <Route path="/handle-admin" element={
+            <ProtectedRoute role="admin">
+              <AdminRequests />
             </ProtectedRoute>
           } />
           <Route path="/drives" element={

@@ -68,19 +68,27 @@ const ApplicationsPage = () => {
     { Header: 'Role', accessor: 'company.role' },
     {
       Header: 'Actions',
-      Cell: ({ row }) => (
-        user.role === 'admin' ? (
+      Cell: ({ row }) => {
+        const { _id, student } = row.original;
+        const status = student.status; // Access status from student
+        return user.role === 'admin' ? (
           <div className="flex gap-2">
-            <button className="px-4 py-2 text-white bg-green-600 rounded" onClick={() => handleAccept(row.original)}>
-              Accept
+            <button 
+              className="px-4 py-2 text-white bg-green-600 rounded" 
+              onClick={() => handleAccept(row.original)}
+            >
+              {status === 'Not Placed' ? 'Accept' : 'Update'}
             </button>
-            <button className="px-4 py-2 text-white bg-red-600 rounded" onClick={() => handleReject(row.original._id)}>
+            <button 
+              className="px-4 py-2 text-white bg-red-600 rounded" 
+              onClick={() => handleReject(_id)}
+            >
               Reject
             </button>
           </div>
-        ) : null
-      ),
-    },
+        ) : null;
+      },
+    }
   ];
 
   return (

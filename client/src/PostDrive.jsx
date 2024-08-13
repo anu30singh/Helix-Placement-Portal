@@ -5,7 +5,7 @@ import { HiUsers } from "react-icons/hi";
 import { FaUserShield } from "react-icons/fa";
 import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
-import { RiLogoutCircleLine } from "react-icons/ri";
+import { PiStudentDuotone } from "react-icons/pi";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
@@ -74,9 +74,13 @@ const PostDrive = () => {
                         <Link to='/drive/applications' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Applications</Link>
                     </div>
                     <div className="flex items-center justify-center gap-3">
-                        <RiLogoutCircleLine size={20} className='text-white'></RiLogoutCircleLine>
-                        <Link to='/candidates' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Candidates</Link>
-                    </div>
+            <PiStudentDuotone size={20} className='text-white'></PiStudentDuotone>
+            <Link to='/candidates' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Candidates</Link>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <FaUserShield size={20} className='text-white'></FaUserShield>
+            <Link to='/handle-admin' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Co-ordinators</Link>
+          </div>
                 </div>
             </div>
             <div className="flex rounded-xl flex-col items-start gap-6 justify-start h-full w-[900px] py-4 pl-10 pr-3 ml-3 bg-purple-500">

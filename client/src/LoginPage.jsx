@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const API_URL=import.meta.env.VITE_API_URL;
@@ -84,7 +84,7 @@ const LoginPage = () => {
         </select>
         <button type="submit" style={styles.submitButton}><span style={styles.title}>Sign In.</span></button>
         <p style={styles.footerText}>
-          Don't have an account? <a href="/register" style={styles.link}>Create an account</a>
+          Don't have an account? <Link to='/register' style={styles.link}>Create an account</Link>
         </p>
         <a href="/forgot-password" style={styles.link}>Forgot password?</a>
       </form>

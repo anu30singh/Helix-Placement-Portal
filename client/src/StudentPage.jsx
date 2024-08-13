@@ -108,7 +108,7 @@ const StudentPage = () => {
         <div className="flex flex-col items-start justify-center gap-8">
           <div className="flex items-center justify-center gap-3">
             <MdDashboard size={20} className='text-white'></MdDashboard>
-            <Link to='/student/interview' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Interview</Link>
+            <Link to='/student/profile' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Student Details</Link>
           </div>
           <div className="flex items-center justify-center gap-3">
             <BsFillSuitcaseLgFill size={20} className='text-white'></BsFillSuitcaseLgFill>

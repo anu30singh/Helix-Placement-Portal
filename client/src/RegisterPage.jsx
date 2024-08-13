@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 const API_URL=import.meta.env.VITE_API_URL;
 
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student'); // Default role is student
+  const [role, setRole] = useState('student');
   const [redirect, setRedirect] = useState(false);
 
   const register = async (e) => {
@@ -16,19 +16,29 @@ const Signup = () => {
       const response = await axios.post(`${API_URL}/register`, {
         username: username,
         password: password,
-        role: role, // Include role in the request body
+        role: role,
       });
 
       if (response.status === 201) {
         console.log(response.data);
         alert('Registration successful');
         setRedirect(true);
-      } else {
+      }
+      else if(response.status === 202){
+        console.log(response.data);
+        alert(response.data.message);
+        setRedirect(true)
+      } 
+      else {
         alert('Registration failed');
       }
     } catch (error) {
-      console.error(error);
-      alert('An error occurred.');
+      console.error('Error:', error);
+      if (error.response && error.response.status === 400) {
+        alert(error.response.data.message);
+      } else {
+        alert('An error occurred.');
+      }
     }
 
     setUsername('');
@@ -80,7 +90,7 @@ const Signup = () => {
           <span style={styles.title}>Sign Up.</span>
         </button>
         <p style={styles.footerText}>
-          Already have an account? <a href="/login" style={styles.link}>Sign In</a>
+          Already have an account? <Link to='/login' style={styles.link}>Sign In</Link>
         </p>
       </form>
     </div>
