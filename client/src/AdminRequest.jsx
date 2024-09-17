@@ -5,6 +5,7 @@ import { HiUsers } from "react-icons/hi";
 import { FaUserShield } from "react-icons/fa";
 import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
+import { LuBookMarked } from "react-icons/lu";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import axios from 'axios';
 
@@ -60,6 +61,10 @@ const AdminRequests = () => {
           <div className="flex items-center justify-center gap-3">
             <FaUserShield size={20} className='text-white'></FaUserShield>
             <Link to='/handle-admin' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Co-ordinators</Link>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <LuBookMarked size={20} className='text-white'></LuBookMarked>
+            <Link to='/courses' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Courses</Link>
           </div>
           </div>
         </div>

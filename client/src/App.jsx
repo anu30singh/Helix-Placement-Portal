@@ -18,6 +18,8 @@ import ApplicationsPage from './ApplicationsPage';
 import InterviewScheduler from './InterviewScheduler';
 import Unauthorized from './Unauthorized';
 import AdminRequests from './AdminRequest';
+import Courses from './Courses';
+import AddCourseForm from './AddCourseForm';
 
 function App() {
   const slides = [
@@ -60,6 +62,11 @@ function App() {
               <AdminRequests />
             </ProtectedRoute>
           } />
+          <Route path="/add-course" element={
+            <ProtectedRoute role="admin">
+              <AddCourseForm />
+            </ProtectedRoute>
+          } />
           <Route path="/drives" element={
             <ProtectedRoute role={['student','admin']}>
             <ActiveDrives />
@@ -70,6 +77,12 @@ function App() {
             <Candidates />
           </ProtectedRoute>
           }  />
+          <Route path="/courses" element={
+            <ProtectedRoute role={['student','admin']}>
+            <Courses />
+          </ProtectedRoute>
+          }  />
+          
           <Route path="/drive/applications" element={
             <ProtectedRoute role={['student','admin']}>
             <ApplicationsPage />

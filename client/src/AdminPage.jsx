@@ -7,6 +7,7 @@ import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { PiStudentDuotone } from "react-icons/pi";
+import { LuBookMarked } from "react-icons/lu";
 import axios from 'axios';
 
 const API_URL=import.meta.env.VITE_API_URL;
@@ -112,6 +113,10 @@ const AdminPage = () => {
           <div className="flex items-center justify-center gap-3">
             <FaUserShield size={20} className='text-white'></FaUserShield>
             <Link to='/handle-admin' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Co-ordinators</Link>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <LuBookMarked size={20} className='text-white'></LuBookMarked>
+            <Link to='/courses' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Courses</Link>
           </div>
           </div>
         </div>

@@ -1,15 +1,19 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db.Connection');
 const User = require('./models/User');
-const AdminRequest=require('./models/AdminRequest')
-const Contact=require('./models/contactSchema')
+const AdminRequest = require('./models/AdminRequest');
+const Course = require('./models/CourseSchema');
+const Contact = require('./models/contactSchema');
 const JobListing = require('./models/JobSchema');
 const myStudent = require('./models/newSchema');
 const Application = require('./models/ApplicationSchema');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const app = express();
 
 app.use(cookieParser());
@@ -17,13 +21,76 @@ app.use(cookieParser());
 const secret = process.env.JWT_SECRET;
 
 app.use(cors({
-  origin:'https://helix-placement-portal.onrender.com',
+  origin: 'http://localhost:5173',  // Ensure the frontend's URL is allowed
   credentials: true
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDB();
+
+// Ensure uploads directory exists
+const uploadDir = './uploads';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Directory to save uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to the file name
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.post('/courses', upload.single('image'), async (req, res) => {
+  try {
+    const { title, author, price, oldPrice, rating, reviews } = req.body;
+    const image = req.file ? req.file.filename : null;
+
+    const newCourse = new Course({
+      title,
+      author,
+      price,
+      oldPrice,
+      rating,
+      reviews,
+      image
+    });
+
+    await newCourse.save();
+    res.status(201).json({ message: 'Course added successfully!', course: newCourse });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding course' });
+  }
+});
+
+app.delete('/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Course.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Course deleted successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting course' });
+  }
+});
+
+app.get('/courses', async (req, res) => {
+  try {
+    const courses = await Course.find();
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses' });
+  }
+});
 
 const authenticateToken = (req, res, next) => {
   const { token } = req.cookies;
@@ -488,6 +555,47 @@ app.delete('/applications/reject/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.post('/courses', async (req, res) => {
+  try {
+    const { title, author, price, oldPrice, rating, reviews, image } = req.body;
+
+    const newCourse = new Course({
+      title,
+      author,
+      price,
+      oldPrice,
+      rating,
+      reviews,
+      image
+    });
+
+    await newCourse.save();
+    res.status(201).json({ message: 'Course added successfully!', course: newCourse });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding course' });
+  }
+});
+
+app.delete('/courses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Course.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Course deleted successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting course' });
+  }
+});
+
+app.get('/courses', async (req, res) => {
+  try {
+    const courses = await Course.find();
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses' });
+  }
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
