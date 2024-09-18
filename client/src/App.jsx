@@ -20,6 +20,8 @@ import Unauthorized from './Unauthorized';
 import AdminRequests from './AdminRequest';
 import Courses from './Courses';
 import AddCourseForm from './AddCourseForm';
+import { CartContext, CartProvider } from './CartContext';
+import CartPage from './CartPage';
 
 function App() {
   const slides = [
@@ -29,6 +31,7 @@ function App() {
   ];
   return (
     <UserContextProvider>
+      <CartProvider>
       <BrowserRouter>
         <Demo />
         <Routes>
@@ -82,7 +85,9 @@ function App() {
             <Courses />
           </ProtectedRoute>
           }  />
-          
+           <Route path="/cart" element={
+            <CartPage />
+          }  />
           <Route path="/drive/applications" element={
             <ProtectedRoute role={['student','admin']}>
             <ApplicationsPage />
@@ -91,6 +96,7 @@ function App() {
         </Routes>
         <Footer></Footer>
       </BrowserRouter>
+      </CartProvider>
     </UserContextProvider>
   );
 }

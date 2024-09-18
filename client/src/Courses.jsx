@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from './Card';
 import { Link } from 'react-router-dom';
+import { FaShoppingCart } from "react-icons/fa";
 import { UserContext } from './UserContext';
+import { CartContext } from './CartContext';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -12,6 +14,7 @@ const Courses = () => {
   const [error, setError] = useState(null);
   const{user,setUser}=useContext(UserContext)
   const role=user?.role
+  const {cart}=useContext(CartContext)
 
   const fetchCourses = async () => {
     try {
@@ -57,26 +60,43 @@ const Courses = () => {
             Add Course
           </button>
         </Link>
+        <Link to='/cart'>
+  <div className="relative">
+    <FaShoppingCart
+      size={30}
+      className={`${
+        role === 'student' 
+          ? 'text-white absolute top-3 right-4' 
+          : 'hidden'
+      }`}
+    />
+    <div className="absolute top-0 flex items-center justify-center w-6 h-6 text-white bg-green-600 rounded-full right-1">
+      {cart.length}
+    </div>
+  </div>
+</Link>
+
       </div>
       
       <div className="grid w-full h-full grid-cols-1 mt-10 mb-4 gap-x-1 gap-y-5 lg:grid-cols-3 md:grid-cols-2">
-        {courses.length > 0 ? (
-          courses.map((course) => (
-            <Card
-              key={course._id}
-              image={`${API_URL}/uploads/${course.image}`}
-              title={course.title}
-              author={course.author}
-              // Ensure the rating is capped at 5
-              rating={Math.min(course.rating, 5)}
-              reviews={course.reviews}
-              price={course.price}
-              oldPrice={course.oldPrice}
-            />
-          ))
-        ) : (
-          <p className="font-semibold montserrat-font text-[28px] text-white">No courses available</p>
-        )}
+      {courses.length > 0 ? (
+  courses.map((course) => (
+    <Card
+      key={course._id}
+      id={course._id}
+      image={`${API_URL}/uploads/${course.image}`}
+      title={course.title}
+      author={course.author}
+      rating={Math.min(course.rating, 5)}
+      reviews={course.reviews}
+      price={course.price}
+      oldPrice={course.oldPrice}
+    />
+  ))
+) : (
+  <p>No courses available</p>
+)}
+
       </div>
     </div>
   );
