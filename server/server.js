@@ -22,7 +22,7 @@ app.use(cookieParser());
 const secret = process.env.JWT_SECRET;
 
 app.use(cors({
-  origin: 'http://localhost:5173',  // Ensure the frontend's URL is allowed
+  origin: 'https://helix-placement-portal.onrender.com/',
   credentials: true
 }));
 
@@ -138,8 +138,8 @@ app.post('/create-payment', async (req, res) => {
       },
     ],
     application_context: {
-      return_url: 'http://localhost:8000/success',
-      cancel_url: 'http://localhost:8000/cancel',
+      return_url: `http://localhost:${PORT}/success`,
+      cancel_url: `http://localhost:${PORT}/cancel`,
     },
   });
 
