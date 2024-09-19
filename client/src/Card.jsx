@@ -18,7 +18,8 @@ const Card = ({ id, image, title, author, rating, reviews, price, oldPrice, show
       image
     };
     addToCart(itemToAdd);
-    console.log(itemToAdd);  // This will help you confirm the item is correct
+    alert('Item added to cart')
+    console.log(itemToAdd);
   };
 
   return (
@@ -34,8 +35,8 @@ const Card = ({ id, image, title, author, rating, reviews, price, oldPrice, show
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <span className="text-lg font-bold text-green-600">₹{price}</span>
-            <span className="ml-2 text-sm text-gray-400 line-through">₹{oldPrice}</span>
+            <span className="text-lg font-bold text-green-600">${price}</span>
+            <span className="ml-2 text-sm text-gray-400 line-through">${oldPrice}</span>
           </div>
           {showCartButton && (
             <FaShoppingCart onClick={handleAddToCart} size={20} className='cursor-pointer' />

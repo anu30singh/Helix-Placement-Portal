@@ -22,7 +22,6 @@ import Courses from './Courses';
 import AddCourseForm from './AddCourseForm';
 import { CartContext, CartProvider } from './CartContext';
 import CartPage from './CartPage';
-
 function App() {
   const slides = [
     { url: './hero-carousel-1.svg', alt: 'Image 1' },

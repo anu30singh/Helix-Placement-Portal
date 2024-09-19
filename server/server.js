@@ -10,6 +10,7 @@ const Contact = require('./models/contactSchema');
 const JobListing = require('./models/JobSchema');
 const myStudent = require('./models/newSchema');
 const Application = require('./models/ApplicationSchema');
+const paypal = require('@paypal/checkout-server-sdk');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const path = require('path');
@@ -30,7 +31,6 @@ app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 
-// Ensure uploads directory exists
 const uploadDir = './uploads';
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -39,10 +39,10 @@ if (!fs.existsSync(uploadDir)) {
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Directory to save uploaded files
+    cb(null, 'uploads/'); 
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to the file name
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -90,6 +90,78 @@ app.get('/courses', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error fetching courses' });
   }
+});
+
+app.get('/search', async (req, res) => {
+  try {
+    const { query } = req.query;
+    const searchRegex = new RegExp(query, 'i'); // Case-insensitive regex search
+    const results = await Course.find({
+      $or: [
+        { title: { $regex: searchRegex } },
+        { author: { $regex: searchRegex } }
+      ]
+    });
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: 'Server Error' });
+  }
+});
+
+// Configure PayPal SDK
+const environment = new paypal.core.SandboxEnvironment(
+  process.env.PAYPAL_CLIENT_ID,
+  process.env.PAYPAL_CLIENT_SECRET
+);
+const client = new paypal.core.PayPalHttpClient(environment);
+
+// Endpoint for creating a payment
+app.post('/create-payment', async (req, res) => {
+  const { currency_code, value } = req.body; // Extract currency_code and value from the request body
+
+  // Validate the currency_code and value
+  if (!currency_code || !value) {
+    return res.status(400).json({ error: 'Currency code and value are required' });
+  }
+
+  const request = new paypal.orders.OrdersCreateRequest();
+  request.prefer('return=representation');
+  request.requestBody({
+    intent: 'CAPTURE',
+    purchase_units: [
+      {
+        amount: {
+          currency_code,
+          value
+        },
+      },
+    ],
+    application_context: {
+      return_url: 'http://localhost:8000/success',
+      cancel_url: 'http://localhost:8000/cancel',
+    },
+  });
+
+  try {
+    const response = await client.execute(request);
+    console.log('PayPal API Response:', response);
+
+    // Extract the approval URL from the response
+    const approvalUrl = response.result.links.find(link => link.rel === 'approve').href;
+    res.json({ approval_url: approvalUrl });
+  } catch (error) {
+    console.error('Error calling PayPal API:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+app.get('/success', (req, res) => {
+  res.send('Payment successful!');
+});
+
+// Endpoint for cancel redirection
+app.get('/cancel', (req, res) => {
+  res.send('Payment cancelled!');
 });
 
 const authenticateToken = (req, res, next) => {
