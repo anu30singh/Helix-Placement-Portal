@@ -22,7 +22,7 @@ app.use(cookieParser());
 const secret = process.env.JWT_SECRET;
 
 app.use(cors({
-  origin: 'https://helix-placement-portal.onrender.com/',
+  origin: 'https://helix-placement-portal.onrender.com',
   credentials: true
 }));
 
