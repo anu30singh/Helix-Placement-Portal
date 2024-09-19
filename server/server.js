@@ -118,9 +118,8 @@ const client = new paypal.core.PayPalHttpClient(environment);
 
 // Endpoint for creating a payment
 app.post('/create-payment', async (req, res) => {
-  const { currency_code, value } = req.body; // Extract currency_code and value from the request body
+  const { currency_code, value } = req.body; 
 
-  // Validate the currency_code and value
   if (!currency_code || !value) {
     return res.status(400).json({ error: 'Currency code and value are required' });
   }
@@ -138,8 +137,8 @@ app.post('/create-payment', async (req, res) => {
       },
     ],
     application_context: {
-      return_url: `http://localhost:${PORT}/success`,
-      cancel_url: `http://localhost:${PORT}/cancel`,
+      return_url: `https://helix-placement-portal.onrender.com/success`,
+      cancel_url: `https://helix-placement-portal.onrender.com/cancel`,
     },
   });
 
@@ -159,7 +158,6 @@ app.get('/success', (req, res) => {
   res.send('Payment successful!');
 });
 
-// Endpoint for cancel redirection
 app.get('/cancel', (req, res) => {
   res.send('Payment cancelled!');
 });
