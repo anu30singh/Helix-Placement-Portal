@@ -107,10 +107,7 @@ const StudentPage = () => {
       <div className="flex flex-col items-center justify-start gap-10 px-3 pt-10 rounded-xl pb-3 ml-4 bg-purple-500 h-[510px] w-60">
         <p className="font-semibold font-sans text-[20px] mr-2 text-black">Welcome <span className="font-bold ">Student</span></p>
         <div className="flex flex-col items-start justify-center gap-8">
-          <div className="flex items-center justify-center gap-3">
-            <MdDashboard size={20} className='text-white'></MdDashboard>
-            <Link to='/student/profile' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Student Details</Link>
-          </div>
+          
           <div className="flex items-center justify-center gap-3">
             <BsFillSuitcaseLgFill size={20} className='text-white'></BsFillSuitcaseLgFill>
             <Link to='/drive/applications' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Applications</Link>
