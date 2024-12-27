@@ -6,6 +6,8 @@ import { FaUserShield } from "react-icons/fa";
 import { BsFillSuitcaseLgFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { FaChartLine } from "react-icons/fa6";
+import { FaChartPie } from "react-icons/fa";
 import { PiStudentDuotone } from "react-icons/pi";
 import { LuBookMarked } from "react-icons/lu";
 import axios from 'axios';
@@ -117,6 +119,10 @@ const AdminPage = () => {
           <div className="flex items-center justify-center gap-3">
             <LuBookMarked size={20} className='text-white'></LuBookMarked>
             <Link to='/courses' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Courses</Link>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <FaChartLine size={20} className='text-white'></FaChartLine>
+            <Link to='/line-chart' className='font-medium font-sans text-[15px] text-[#17181E] hover:font-bold hover:text-white'>Line Chart</Link>
           </div>
           </div>
         </div>

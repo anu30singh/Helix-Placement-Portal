@@ -22,6 +22,7 @@ import Courses from './Courses';
 import AddCourseForm from './AddCourseForm';
 import { CartContext, CartProvider } from './CartContext';
 import CartPage from './CartPage';
+import Stats from './Stats';
 function App() {
   const slides = [
     { url: './hero-carousel-1.svg', alt: 'Image 1' },
@@ -52,6 +53,11 @@ function App() {
           <Route path="/admin/post" element={
             <ProtectedRoute role="admin">
               <PostDrive />
+            </ProtectedRoute>
+          } />
+          <Route path="/line-chart" element={
+            <ProtectedRoute role="admin">
+              <Stats/>
             </ProtectedRoute>
           } />
           <Route path="/admin/interview" element={

@@ -88,7 +88,7 @@ const ActiveDrives = () => {
     ];
 
     return (
-        <div className='w-full h-screen justify-start items-start flex-col pl-12 pr-6 pt-12 pb-3 flex bg-[#17181E]'>
+        <div className='w-full h-full justify-start items-start flex-col pl-12 pr-6 pt-12 pb-3 flex bg-[#17181E]'>
             <p className="font-semibold mt-4 montserrat-font text-[28px] ml-3 text-zinc-100">Active Drives</p>
             <DataTable columns={jobColumns} data={value} onDelete={handleDelete} isAdmin={isAdmin} />
         </div>
